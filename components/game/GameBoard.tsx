@@ -1,5 +1,6 @@
 "use client";
 
+import { useSound } from "@/contexts/SoundContext";
 import { useGameLogic } from "@/hooks/useGameLogic";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useTimer } from "@/hooks/useTimer";
@@ -24,9 +25,17 @@ export default function GameBoard() {
     bestTimes: { easy: null, medium: null, hard: null },
   });
 
+  // Get sound functions from global context
+  const { playMatchSound, playMismatchSound, playFlipSound } = useSound();
+
   const handleGameComplete = (completionTime: number) => {
     setGameCompleteTime(completionTime);
     setShowStats(true);
+
+    // Play victory fanfare
+    playMatchSound();
+    setTimeout(() => playMatchSound(), 300);
+    setTimeout(() => playMatchSound(), 600);
 
     setStats((prev) => ({
       wins: prev.wins + 1,
@@ -52,10 +61,17 @@ export default function GameBoard() {
     setStats((prev) => ({ ...prev, losses: prev.losses + 1 }));
     setShowStats(true);
     setGameCompleteTime(null);
+    playMismatchSound();
   };
 
   const { cards, moves, isGameActive, initializeGame, handleCardClick } =
-    useGameLogic(difficulty, handleGameComplete);
+    useGameLogic({
+      difficulty,
+      onGameComplete: handleGameComplete,
+      onMatch: playMatchSound,
+      onMismatch: playMismatchSound,
+      onFlip: playFlipSound,
+    });
 
   const { timeElapsed, timeRemaining, resetTimer } = useTimer(
     isGameActive,

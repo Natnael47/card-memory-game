@@ -1,7 +1,16 @@
 "use client";
 
+import { useSound } from "@/contexts/SoundContext";
 import { Difficulty } from "@/types/game.types";
-import { Clock, RotateCcw, Target, Trophy, Zap } from "lucide-react";
+import {
+  Clock,
+  RotateCcw,
+  Target,
+  Trophy,
+  Volume2,
+  VolumeX,
+  Zap,
+} from "lucide-react";
 
 interface GameControlsProps {
   difficulty: Difficulty;
@@ -16,6 +25,18 @@ export default function GameControls({
   onNewGame,
   moves,
 }: GameControlsProps) {
+  const { isMuted, toggleMute, playFlipSound } = useSound();
+
+  const handleToggleSound = () => {
+    toggleMute();
+    // Play test sound when unmuting
+    if (isMuted) {
+      setTimeout(() => {
+        playFlipSound();
+      }, 100);
+    }
+  };
+
   return (
     <div className="flex flex-wrap items-center justify-between gap-4 mb-6 p-4 bg-white/10 backdrop-blur-sm rounded-lg shadow-lg">
       <div className="flex items-center gap-3">
@@ -76,15 +97,31 @@ export default function GameControls({
         </button>
       </div>
 
-      <button
-        onClick={onNewGame}
-        className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold
-          bg-white/20 text-white hover:bg-white/30 border border-white/30
-          transition-all duration-200 cursor-pointer"
-      >
-        <RotateCcw className="w-4 h-4" />
-        New Game
-      </button>
+      <div className="flex gap-2">
+        <button
+          onClick={handleToggleSound}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold
+            bg-white/20 text-white hover:bg-white/30 border border-white/30
+            transition-all duration-200 cursor-pointer"
+          title={isMuted ? "Unmute" : "Mute"}
+        >
+          {isMuted ? (
+            <VolumeX className="w-4 h-4" />
+          ) : (
+            <Volume2 className="w-4 h-4" />
+          )}
+        </button>
+
+        <button
+          onClick={onNewGame}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold
+            bg-white/20 text-white hover:bg-white/30 border border-white/30
+            transition-all duration-200 cursor-pointer"
+        >
+          <RotateCcw className="w-4 h-4" />
+          New Game
+        </button>
+      </div>
     </div>
   );
 }

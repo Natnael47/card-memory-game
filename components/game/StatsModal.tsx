@@ -149,15 +149,15 @@ export default function StatsModal({
         <div className="flex gap-3 p-6 border-t border-gray-700">
           <Button
             onClick={onPlayAgain}
-            className="flex-1 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white"
+            className="flex-1 bg-gradient-to-r cursor-pointer from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white"
           >
             <Target className="w-4 h-4 mr-2" />
             Play Again
           </Button>
           <Button
             onClick={onClose}
-            variant="outline"
-            className="flex-1 border-gray-600 text-gray-300 hover:bg-white/10"
+            variant="secondary"
+            className="flex-1 border-gray-600 cursor-pointer hover:bg-white/10"
           >
             Close
           </Button>

@@ -3,10 +3,21 @@ import { DIFFICULTY_CONFIGS } from "@/utils/constants";
 import { generateCards } from "@/utils/gameUtils";
 import { useCallback, useEffect, useState } from "react";
 
-export const useGameLogic = (
-  difficulty: Difficulty,
-  onGameComplete?: (time: number) => void,
-) => {
+interface UseGameLogicProps {
+  difficulty: Difficulty;
+  onGameComplete?: (time: number) => void;
+  onMatch?: () => void;
+  onMismatch?: () => void;
+  onFlip?: () => void;
+}
+
+export const useGameLogic = ({
+  difficulty,
+  onGameComplete,
+  onMatch,
+  onMismatch,
+  onFlip,
+}: UseGameLogicProps) => {
   const [cards, setCards] = useState<Card[]>([]);
   const [moves, setMoves] = useState(0);
   const [isGameActive, setIsGameActive] = useState(false);
@@ -35,6 +46,9 @@ export const useGameLogic = (
       if (!isGameActive || isChecking) return;
       if (cards[index].isMatched || cards[index].isFlipped) return;
 
+      // Play flip sound
+      onFlip?.();
+
       const newCards = [...cards];
 
       // First card selected
@@ -55,7 +69,9 @@ export const useGameLogic = (
         const secondCard = newCards[index];
 
         if (firstCard.imageId === secondCard.imageId) {
-          // MATCH FOUND - Mark as matched after animation
+          // MATCH FOUND - Play success sound
+          onMatch?.();
+
           setTimeout(() => {
             const matchedCards = [...newCards];
             matchedCards[selectedCardIndex].isMatched = true;
@@ -66,9 +82,11 @@ export const useGameLogic = (
             setMatchedPairs((prev) => prev + 1);
             setSelectedCardIndex(null);
             setIsChecking(false);
-          }, 800); // Longer delay to show green flash animation
+          }, 800);
         } else {
-          // NO MATCH - Flip both back after delay
+          // NO MATCH - Play error sound
+          onMismatch?.();
+
           setTimeout(() => {
             const resetCards = [...newCards];
             resetCards[selectedCardIndex].isFlipped = false;
@@ -80,7 +98,15 @@ export const useGameLogic = (
         }
       }
     },
-    [cards, isGameActive, isChecking, selectedCardIndex],
+    [
+      cards,
+      isGameActive,
+      isChecking,
+      selectedCardIndex,
+      onMatch,
+      onMismatch,
+      onFlip,
+    ],
   );
 
   // Check for game completion
