@@ -55,18 +55,20 @@ export const useGameLogic = (
         const secondCard = newCards[index];
 
         if (firstCard.imageId === secondCard.imageId) {
-          // Match found
+          // MATCH FOUND - Mark as matched after animation
           setTimeout(() => {
             const matchedCards = [...newCards];
             matchedCards[selectedCardIndex].isMatched = true;
+            matchedCards[selectedCardIndex].isFlipped = false;
             matchedCards[index].isMatched = true;
+            matchedCards[index].isFlipped = false;
             setCards(matchedCards);
             setMatchedPairs((prev) => prev + 1);
             setSelectedCardIndex(null);
             setIsChecking(false);
-          }, 500);
+          }, 800); // Longer delay to show green flash animation
         } else {
-          // No match - flip back after delay
+          // NO MATCH - Flip both back after delay
           setTimeout(() => {
             const resetCards = [...newCards];
             resetCards[selectedCardIndex].isFlipped = false;
@@ -74,7 +76,7 @@ export const useGameLogic = (
             setCards(resetCards);
             setSelectedCardIndex(null);
             setIsChecking(false);
-          }, 1000);
+          }, 800);
         }
       }
     },

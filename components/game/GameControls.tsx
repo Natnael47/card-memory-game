@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Difficulty } from "@/types/game.types";
 import { Clock, RotateCcw, Target, Trophy, Zap } from "lucide-react";
 
@@ -28,67 +27,64 @@ export default function GameControls({
       </div>
 
       <div className="flex gap-2">
-        <Button
-          variant={difficulty === "easy" ? "default" : "outline"}
+        <button
           onClick={() => onDifficultyChange("easy")}
           className={`
-            gap-2 transition-all duration-200
+            flex items-center gap-2 px-4 py-2 rounded-lg font-semibold
+            transition-all duration-200 cursor-pointer
             ${
               difficulty === "easy"
-                ? "bg-green-500 hover:bg-green-600 shadow-lg scale-105"
-                : "text-white border-white/30 hover:bg-white/20"
+                ? "bg-green-500 text-white shadow-lg scale-105 hover:bg-green-600"
+                : "bg-white/20 text-white hover:bg-white/30 border border-white/30"
             }
           `}
-          size="default"
         >
           <Zap className="w-4 h-4" />
           Easy
-        </Button>
+        </button>
 
-        <Button
-          variant={difficulty === "medium" ? "default" : "outline"}
+        <button
           onClick={() => onDifficultyChange("medium")}
           className={`
-            gap-2 transition-all duration-200
+            flex items-center gap-2 px-4 py-2 rounded-lg font-semibold
+            transition-all duration-200 cursor-pointer
             ${
               difficulty === "medium"
-                ? "bg-yellow-500 hover:bg-yellow-600 shadow-lg scale-105"
-                : "text-white border-white/30 hover:bg-white/20"
+                ? "bg-yellow-500 text-white shadow-lg scale-105 hover:bg-yellow-600"
+                : "bg-white/20 text-white hover:bg-white/30 border border-white/30"
             }
           `}
-          size="default"
         >
           <Target className="w-4 h-4" />
           Medium
-        </Button>
+        </button>
 
-        <Button
-          variant={difficulty === "hard" ? "default" : "outline"}
+        <button
           onClick={() => onDifficultyChange("hard")}
           className={`
-            gap-2 transition-all duration-200
+            flex items-center gap-2 px-4 py-2 rounded-lg font-semibold
+            transition-all duration-200 cursor-pointer
             ${
               difficulty === "hard"
-                ? "bg-red-500 hover:bg-red-600 shadow-lg scale-105"
-                : "text-white border-white/30 hover:bg-white/20"
+                ? "bg-red-500 text-white shadow-lg scale-105 hover:bg-red-600"
+                : "bg-white/20 text-white hover:bg-white/30 border border-white/30"
             }
           `}
-          size="default"
         >
           <Clock className="w-4 h-4" />
           Hard
-        </Button>
+        </button>
       </div>
 
-      <Button
+      <button
         onClick={onNewGame}
-        variant="secondary"
-        size="default"
-        className="gap-2 bg-white/20 text-white hover:bg-white/30 border border-white/30"
+        className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold
+          bg-white/20 text-white hover:bg-white/30 border border-white/30
+          transition-all duration-200 cursor-pointer"
       >
         <RotateCcw className="w-4 h-4" />
         New Game
-      </Button>
+      </button>
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { Difficulty, GameStats } from "@/types/game.types";
 import { DIFFICULTY_CONFIGS } from "@/utils/constants";
 import { getGridColsClass } from "@/utils/gameUtils";
 import confetti from "canvas-confetti";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Card from "./Card";
 import GameControls from "./GameControls";
@@ -27,7 +28,6 @@ export default function GameBoard() {
     setGameCompleteTime(completionTime);
     setShowStats(true);
 
-    // Update stats for win
     setStats((prev) => ({
       wins: prev.wins + 1,
       losses: prev.losses,
@@ -39,7 +39,6 @@ export default function GameBoard() {
       },
     }));
 
-    // Trigger confetti effect
     confetti({
       particleCount: 150,
       spread: 70,
@@ -71,7 +70,6 @@ export default function GameBoard() {
     setGameCompleteTime(null);
   };
 
-  // Initialize game when difficulty changes
   useEffect(() => {
     startNewGame();
   }, [difficulty]);
@@ -95,18 +93,25 @@ export default function GameBoard() {
           hasTimeLimit={config.timeLimit !== null}
         />
 
-        <div className="flex justify-center items-center">
+        <motion.div
+          className="flex justify-center items-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <div className={gridClass}>
-            {cards.map((card, index) => (
-              <Card
-                key={card.id}
-                card={card}
-                onClick={() => handleCardClick(index)}
-                disabled={!isGameActive || showStats}
-              />
-            ))}
+            <AnimatePresence mode="wait">
+              {cards.map((card, index) => (
+                <Card
+                  key={card.id}
+                  card={card}
+                  onClick={() => handleCardClick(index)}
+                  disabled={!isGameActive || showStats}
+                />
+              ))}
+            </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
 
         <StatsModal
           isOpen={showStats}
